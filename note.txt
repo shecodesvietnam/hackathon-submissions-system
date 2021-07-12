@@ -1,0 +1,14 @@
+Run seed if first-time use, run these command:
+flask db init
+flask db migrate -m "create all tables"
+Go into /migrations/version/[file]_create_all_tables.py and import import sqlalchemy_utils
+flask db upgrade
+python seed.py
+
+
+Reminder:
+MAIL_SERVER = smtp.googlemail.com
+MAIL_PORT = 587
+MAIL_USE_TLS = 1
+MAIL_USERNAME = <admin-gmail-username>
+MAIL_PASSWORD = <admin-gmail-password>

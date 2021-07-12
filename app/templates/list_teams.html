@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        {% for team in teams %}
+            <div>
+                <p>{{ team.name }}</p>
+                <p>{{ team.slide }}</p>
+                <p>{{ team.github }}</p>
+                <p>{{ team.youtube }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

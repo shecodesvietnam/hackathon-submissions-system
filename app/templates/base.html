@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        {% if title %}
+            <title>{{ title }}</title>
+        {% else %}
+            <title>Shecodes Hackathon</title>
+        {% endif %}
+        <link href="{{ url_for('static', filename='css/main/styles.css') }}" rel="stylesheet" />
+        {% block css_styles %}
+        {% endblock %}
+        {% block external_links %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <section id="content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-info" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}
+            {% endblock %}
+        </section>
+    </body>
+</html>

@@ -1,0 +1,10 @@
+Dear team {{ user.name }},
+We are proudly announcing that your team is now registered as a team in Shecodes Hackathon competition.
+Here is your team's account
+Username: {{ user.username }}
+Password: {{ password }}
+To login now, click on the following link:
+{{ url_for('login', _external=True) }}
+Please remember not to lose this email by any mean.
+Sincerely,
+The Shecodes Hackathon Team

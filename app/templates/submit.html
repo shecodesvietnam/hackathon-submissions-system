@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="title">
+        Submit Form
+    </div>
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.slide.label }}
+            <div class="field">
+                {{ form.slide(size=100) }}
+                {% for error in form.slide.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+        </p>
+        <br>
+        <p>
+            {{ form.github.label }}
+            <div class="field">
+                {{ form.github(size=100) }}
+                {% for error in form.github.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+        </p>
+        <br>
+        <p>
+            {{ form.youtube.label }}
+            <div class="field">
+                {{ form.youtube(size=100) }}
+                {% for error in form.youtube.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+        </p>
+        <div class="field">
+            {{ form.submit() }}
+        </div>
+    </form>
+{% endblock %}
