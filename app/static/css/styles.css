@@ -12,6 +12,11 @@ input{
   border-radius: 10px;
 }
 
+.logo{
+  width: 300px;
+  margin-bottom: 3rem;
+}
+
 .loginBtn{
   margin-top: 1rem;
   background: linear-gradient(98.26deg, #55A9DD 0%, #F39BBD 100%);
