@@ -1,42 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="title">
-        Submit Form
-    </div>
-    <form action="" method="POST">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.slide.label }}
-            <div class="field">
-                {{ form.slide(size=100) }}
-                {% for error in form.slide.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-        </p>
-        <br>
-        <p>
-            {{ form.github.label }}
-            <div class="field">
-                {{ form.github(size=100) }}
-                {% for error in form.github.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-        </p>
-        <br>
-        <p>
-            {{ form.youtube.label }}
-            <div class="field">
-                {{ form.youtube(size=100) }}
-                {% for error in form.youtube.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-        </p>
-        <div class="field">
-            {{ form.submit() }}
-        </div>
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <form class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" method="POST">
+      <div class="d-flex justify-content-center">
+        <img class="logo" src="../static/images/svglogoWithoutBg.svg" alt="SheCodes Logo">
+      </div>
+      <h1 class="text-white text-center welcome">
+           Welcome! <br>
+           Team Hackathon
+      </h1>
+      <div class="form-group">
+        <label for="slide" class="text-white">Slide Link</label>
+        <input type="text" class="form-control bg-dark" id="slide" placeholder="Slide Link" required="required">
+      </div>
+      <div class="form-group">
+        <label for="github" class="text-white">Github Link</label>
+        <input type="text" class="form-control bg-dark" id="github" placeholder="Github Link" required="required">
+      </div>
+      <div class="form-group">
+        <label for="youtube" class="text-white">Youtube Link (optional)</label>
+        <input type="text" class="form-control bg-dark" id="youtube" placeholder="Password">
+      </div>
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="btn submitBtn">Submit</button>
+      </div>
     </form>
+  </div>
+</div>
 {% endblock %}
