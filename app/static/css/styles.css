@@ -13,8 +13,14 @@ input{
 }
 
 .logo{
-  width: 300px;
+  width: 200px;
   margin-bottom: 1rem;
+}
+
+.logoLogin{
+  width: 200px;
+  margin-bottom: 4rem;
+  margin-top: -5rem;
 }
 
 .submitBtn{
