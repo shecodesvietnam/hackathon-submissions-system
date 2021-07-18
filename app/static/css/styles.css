@@ -1,0 +1,30 @@
+body,html{
+    height:100%;
+}
+
+label{
+  margin-bottom: 1rem;
+}
+
+input{
+  border: 1px solid #D8D8D8;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.loginBtn{
+  margin-top: 1rem;
+  background: linear-gradient(98.26deg, #55A9DD 0%, #F39BBD 100%);
+  border-radius: 10px;
+  width: 100px;
+  color: #000000;
+}
+
+.loginBtn:hover{
+  background: linear-gradient(98.26deg, #E91F6F 0%, #5056A1 100%);
+  color: #FFFFFF;
+}
+
+.form-group{
+  margin-bottom: 1rem;
+}
