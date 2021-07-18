@@ -4,6 +4,7 @@
 <div class="container h-100">
   <div class="row h-100 justify-content-center align-items-center">
     <form class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" method="POST">
+      {{ form.hidden_tag() }}
       <div class="d-flex justify-content-center">
         <img class="logo" src="../static/images/svglogoWithoutBg.svg" alt="SheCodes Logo">
       </div>
@@ -12,19 +13,19 @@
            Team Hackathon
       </h1>
       <div class="form-group">
-        <label for="slide" class="text-white">Slide Link</label>
-        <input type="text" class="form-control bg-dark text-white" id="slide" placeholder="Slide Link" required="required">
+        {{ form.slide.label(class="text-white") }}
+        {{ form.slide(class="form-control bg-dark text-white", placeholder="Slide Link") }}
       </div>
       <div class="form-group">
-        <label for="github" class="text-white">Github Link</label>
-        <input type="text" class="form-control bg-dark text-white" id="github" placeholder="Github Link" required="required">
+        {{ form.github.label(class="text-white") }}
+        {{ form.github(class="form-control bg-dark text-white", placeholder="Github Link") }}
       </div>
       <div class="form-group">
-        <label for="youtube" class="text-white">Youtube Link (optional)</label>
-        <input type="text" class="form-control bg-dark text-white" id="youtube" placeholder="Password">
+        {{ form.youtube.label(class="text-white") }}
+        {{ form.youtube(class="form-control bg-dark text-white", placeholder="Youtube Link") }}
       </div>
       <div class="d-flex justify-content-center">
-        <button type="submit" class="btn submitBtn">Submit</button>
+        {{ form.submit(class="btn submitBtn") }}
       </div>
     </form>
   </div>
