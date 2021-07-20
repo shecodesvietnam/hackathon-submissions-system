@@ -30,7 +30,7 @@ input{
 }
 
 .submitBtn{
-  margin-top: 1rem;
+  margin-top: 2rem;
   background: linear-gradient(98.26deg, #55A9DD 0%, #F39BBD 100%);
   border-radius: 10px;
   width: 100px;
@@ -60,11 +60,20 @@ input{
 
 .grade{
   color: #6F7DFF;
-  float: right;
+  /* float: right; */
+  margin-right: 1.5rem;
+  background-color: #000;
+  border: 0;
 }
 
 .link{
   margin-left: 1rem;
   text-decoration: none;
-  float: right;
+  /* float: right; */
+}
+
+.link-hidden{
+  margin-left: 1rem;
+  text-decoration: none;
+  visibility: hidden;
 }

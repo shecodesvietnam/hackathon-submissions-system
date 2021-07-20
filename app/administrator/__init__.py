@@ -4,7 +4,7 @@ from flask_basicauth import BasicAuth
 from flask_admin import Admin
 from flask_admin.contrib import sqla
 from app import db
-from app.models import User
+from app.models import User, Grade
 from app.utils import generate_random_password
 from app.email import send_team_account_email
 
@@ -32,7 +32,7 @@ def init_admin(app):
     
     class UserModelView(ModelView):
         column_exclude_list = ('password_hash')
-        form_excluded_columns = ('username', 'password_hash', 'slide', 'github', 'youtube')
+        form_excluded_columns = ('username', 'password_hash', 'slide', 'github', 'youtube', 'grade')
 
         def on_model_change(self, form, model, is_created):
             if is_created:
@@ -42,5 +42,12 @@ def init_admin(app):
                 # send_team_account_email(model, password)
             return super().on_model_change(form, model, is_created)
 
+    
+    class GradeModelView(ModelView):
+        can_edit = False
+        can_create = False
+        can_delete = False
+
     admin = Admin(app)
     admin.add_view(UserModelView(User, db.session))
+    admin.add_view(GradeModelView(Grade, db.session))

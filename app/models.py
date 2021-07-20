@@ -25,8 +25,18 @@ class User(UserMixin, db.Model):
     def set_username(self):
         self.username = generate_username(self.name)
 
+    def __str__(self) -> str:
+        return f'{self.name}'
+
     def __repr__(self) -> str:
         return f'<Username: {self.username}, Is judge: {self.is_judge}>'
+
+
+class Grade(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    team = db.relationship('User', backref='grade')
+    total = db.Column(db.Integer)
 
 
 @login.user_loader

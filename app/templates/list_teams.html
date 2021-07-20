@@ -6,27 +6,35 @@
     <img class="logoJudge" src="../static/images/svglogoWithoutBg.svg" alt="SheCodes Logo">
   </div>
   <ul class="list-group col-12">
-    <li class="list-group-item lstTeam text-white">
-      <div class="row">
-        <div class="col-6">
-          <h4>Cras justo odio</h4>
+    {% for team in teams %}
+      <li class="list-group-item lstTeam text-white">
+        <div class="row">
+          <div class="col-7">
+              <h4>{{ team.name }}</h4>
+          </div>
+          <div class="col-3 d-flex justify-content-end">
+            <a class="text-white link" href="{{ team.slide }}">
+              <i class="far fa-2x fa-fw fa-file-alt"></i>
+            </a>
+            <a class="text-white link" href="{{ team.github }}">
+              <i class="fab fa-2x fa-fw fa-github"></i>
+            </a>
+            {% if team.youtube %}
+              <a class="text-white link" href="{{ team.youtube }}">
+                <i class="fab fa-2x fa-fw fa-youtube"></i>
+              </a>
+            {% else %}
+              <a class="text-white link-hidden" href="{{ team.youtube }}">
+                <i class="fab fa-2x fa-fw fa-youtube"></i>
+              </a>
+            {% endif %}
+          </div>
+          <div class="col-2 d-flex justify-content-end">
+            <button class="grade">Grade</button>
+          </div>
         </div>
-        <div class="col-4">
-          <a class="text-white link">
-            <i class="fab fa-2x fa-fw fa-youtube"></i>
-          </a>
-          <a class="text-white link">
-            <i class="fab fa-2x fa-fw fa-github"></i>
-          </a>
-          <a class="text-white link">
-            <i class="far fa-2x fa-fw fa-file-alt"></i>
-          </a>
-        </div>
-        <div class="col-2">
-          <span class="grade">Grade</span>
-        </div>
-      </div>
-    </li>
-    </ul>
+      </li>
+    {% endfor %}
+  </ul>
 </div>
 {% endblock %}

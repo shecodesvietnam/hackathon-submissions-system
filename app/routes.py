@@ -70,11 +70,6 @@ def list_teams():
     if not current_user.is_judge:
         return render_template('401.html'), 401
 
-    page = request.args.get('page', 1, type=int)
-    teams = User.query.filter_by(is_judge=False).paginate(
-        page, app.config['TEAMS_PER_PAGE'], False
-    )
-    next_url = url_for('list_teams', page=teams.next_num) if teams.has_next else None
-    prev_url = url_for('list_teams', page=teams.prev_num) if teams.has_prev else None
+    teams = User.query.filter_by(is_judge=False).all()
 
-    return render_template('list_teams.html', title='Teams | Shecodes Hackathon', teams=teams.items, next_url=next_url, prev_url=prev_url)
+    return render_template('list_teams.html', title='Teams | Shecodes Hackathon', teams=teams)

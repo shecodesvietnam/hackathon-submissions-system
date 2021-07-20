@@ -15,7 +15,7 @@ class Config(object):
     # ? For sqlite
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
     # ? For postgreSQL
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://postgres:postgres@localhost/HackathonSubmission'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://postgres:123456@localhost/HackathonSubmission'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     TEAMS_PER_PAGE = 5
