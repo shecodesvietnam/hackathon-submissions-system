@@ -1,14 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div>
-        {% for team in teams %}
-            <div>
-                <p>{{ team.name }}</p>
-                <p>{{ team.slide }}</p>
-                <p>{{ team.github }}</p>
-                <p>{{ team.youtube }}</p>
-            </div>
-        {% endfor %}
-    </div>
+<div class="container">
+  <div class="d-flex justify-content-center">
+    <img class="logoJudge" src="../static/images/svglogoWithoutBg.svg" alt="SheCodes Logo">
+  </div>
+  <ul class="list-group col-12">
+    <li class="list-group-item lstTeam text-white">
+      <div class="row">
+        <div class="col-6">
+          <h4>Cras justo odio</h4>
+        </div>
+        <div class="col-4">
+          <a class="text-white link">
+            <i class="fab fa-2x fa-fw fa-youtube"></i>
+          </a>
+          <a class="text-white link">
+            <i class="fab fa-2x fa-fw fa-github"></i>
+          </a>
+          <a class="text-white link">
+            <i class="far fa-2x fa-fw fa-file-alt"></i>
+          </a>
+        </div>
+        <div class="col-2">
+          <span class="grade">Grade</span>
+        </div>
+      </div>
+    </li>
+    </ul>
+</div>
 {% endblock %}

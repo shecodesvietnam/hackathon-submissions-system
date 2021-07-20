@@ -13,14 +13,20 @@ input{
 }
 
 .logo{
-  width: 200px;
+  width: 215px;
   margin-bottom: 1rem;
 }
 
 .logoLogin{
-  width: 200px;
+  width: 215px;
   margin-bottom: 4rem;
   margin-top: -5rem;
+}
+
+.logoJudge{
+  width: 215px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .submitBtn{
@@ -42,4 +48,23 @@ input{
 
 .welcome{
   margin-bottom: 1rem;
+}
+
+.lstTeam{
+  background: #000000;
+  box-shadow: 0px 0px 20px #000000;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  height: 55px;
+}
+
+.grade{
+  color: #6F7DFF;
+  float: right;
+}
+
+.link{
+  margin-left: 1rem;
+  text-decoration: none;
+  float: right;
 }
