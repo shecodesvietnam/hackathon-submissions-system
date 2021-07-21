@@ -10,7 +10,7 @@
       <li class="list-group-item lstTeam text-white">
         <div class="row">
           <div class="col-7">
-              <h4>{{ team.name }}</h4>
+              <h4>{{ team.name }} (xx đ)</h4>
           </div>
           <div class="col-3 d-flex justify-content-end">
             <a class="text-white link" href="{{ team.slide }}">
@@ -29,9 +29,15 @@
               </a>
             {% endif %}
           </div>
+          {% if team.graded %}
           <div class="col-2 d-flex justify-content-end">
             <button class="grade">Grade</button>
           </div>
+          {% else %}
+          <div class="col-2 d-flex justify-content-end">
+            <button class="grade">Grade Again</button>
+          </div>
+          {% endif %}
         </div>
       </li>
     {% endfor %}
