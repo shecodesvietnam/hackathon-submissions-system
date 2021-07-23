@@ -14,7 +14,7 @@ mail = Mail(app)
 login = LoginManager(app)
 login.login_view = 'login'
 
-from app import routes, models, errors
+from app import routes, models, errors, api, email, forms, middlewares, utils
 
 from app.administrator import init_admin
 init_admin(app)

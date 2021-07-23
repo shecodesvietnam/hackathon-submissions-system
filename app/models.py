@@ -5,16 +5,26 @@ from app import app, db, login
 from app.utils import generate_username
 
 class User(UserMixin, db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(120), index=True, unique=True)
     name = db.Column(db.String(100))
-    proj_name = db.Column(db.String(100))
-    slide = db.Column(URLType)
-    github = db.Column(URLType)
-    youtube = db.Column(URLType)
-    is_judge = db.Column(db.Boolean)
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    role = db.relationship('Role', backref='team')
+    grade_round_1 = db.relationship(
+        'Project',
+        secondary='graderound1',
+        backref='grade_round_1',
+        lazy='dynamic'
+    )
+    grade_round_2 = db.relationship(
+        'Project',
+        secondary='graderound2',
+        backref='grade_round_2',
+        lazy='dynamic'
+    )
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -29,14 +39,54 @@ class User(UserMixin, db.Model):
         return f'{self.name}'
 
     def __repr__(self) -> str:
-        return f'<Username: {self.username}, Is judge: {self.is_judge}>'
+        return f'<Username: {self.username}, Role: {self.role.name}>'
 
 
-class Grade(db.Model):
+class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    team_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    team = db.relationship('User', backref='grade')
+    name = db.Column(db.String(50))
+
+    def __repr__(self) -> str:
+        return f'<Role: {self.name}>'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    name = db.Column(db.String(100))
+    slide = db.Column(URLType)
+    github = db.Column(URLType)
+    youtube = db.Column(URLType)
+    team = db.relationship('User', backref='project')
+
+    def __repr__(self) -> str:
+        return f'<Project: {self.name}>'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+
+class GradeRound1(db.Model):
+    __tablename__ = 'graderound1'
+    mentor_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), primary_key=True)
     total = db.Column(db.Integer)
+
+    def __repr__(self) -> str:
+        return f'<Grade round 1, mentor_id: {self.mentor_id}, project_id: {self.project_id}>'
+
+
+class GradeRound2(db.Model):
+    __tablename__ = 'graderound2'
+    judge_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), primary_key=True)
+    total = db.Column(db.Integer)
+
+    def __repr__(self) -> str:
+        return f'<Grade round 2, judge_id: {self.judge_id}, project_id: {self.project_id}>'
 
 
 @login.user_loader

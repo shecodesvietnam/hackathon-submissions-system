@@ -4,7 +4,7 @@ from flask_basicauth import BasicAuth
 from flask_admin import Admin
 from flask_admin.contrib import sqla
 from app import db
-from app.models import User, Grade
+from app.models import User, Role, Project, GradeRound1, GradeRound2
 from app.utils import generate_random_password
 from app.email import send_team_account_email
 
@@ -32,7 +32,7 @@ def init_admin(app):
     
     class UserModelView(ModelView):
         column_exclude_list = ('password_hash')
-        form_excluded_columns = ('username', 'password_hash', 'slide', 'github', 'youtube', 'grade')
+        form_excluded_columns = ('username', 'password_hash', 'project', 'grade_round_1', 'grade_round_2')
 
         def on_model_change(self, form, model, is_created):
             if is_created:
@@ -43,11 +43,41 @@ def init_admin(app):
             return super().on_model_change(form, model, is_created)
 
     
-    class GradeModelView(ModelView):
-        can_edit = False
+    class RoleModelView(ModelView):
+        column_exclude_list = ('team')
+        form_excluded_columns = ('team_id')
+
+        def on_model_change(self, form, model, is_created):
+            return super().on_model_change(form, model, is_created)
+
+    
+    class ProjectModelView(ModelView):
+        form_excluded_columns = ('grade_round_1', 'grade_round_2')
+        def on_model_change(self, form, model, is_created):
+            return super().on_model_change(form, model, is_created)
+        
+    class GradeRound1ModelView(ModelView):
         can_create = False
+        can_edit = False
         can_delete = False
+        column_list = ('mentor_id', 'project_id', 'total')
+
+        # def on_model_change(self, form, model, is_created):
+        #     return super().on_model_change(form, model, is_created)
+
+    class GradeRound2ModelView(ModelView):
+        can_create = False
+        can_edit = False
+        can_delete = False
+        column_list = ('judge_id', 'project_id', 'total')
+
+        # def on_model_change(self, form, model, is_created):
+        #     return super().on_model_change(form, model, is_created)
 
     admin = Admin(app)
     admin.add_view(UserModelView(User, db.session))
-    admin.add_view(GradeModelView(Grade, db.session))
+    admin.add_view(RoleModelView(Role, db.session))
+    admin.add_view(ProjectModelView(Project, db.session))
+    admin.add_view(GradeRound1ModelView(GradeRound1, db.session))
+    admin.add_view(GradeRound2ModelView(GradeRound2, db.session))
+    

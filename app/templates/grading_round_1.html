@@ -6,11 +6,11 @@
     <img class="logoJudge" src="../static/images/svglogoWithoutBg.svg" alt="SheCodes Logo">
   </div>
   <ul class="list-group col-12">
-    {% for team in teams %}
+    {% for team in graded_teams %}
       <li class="list-group-item lstTeam text-white">
         <div class="row">
           <div class="col-7">
-              <h4>{{ team.name }} (xx đ)</h4>
+              <h4>{{ team.name }} ({{ team.total }} điểm)</h4>
           </div>
           <div class="col-3 d-flex justify-content-end">
             <a class="text-white link" href="{{ team.slide }}">
@@ -29,15 +29,39 @@
               </a>
             {% endif %}
           </div>
-          {% if team.graded %}
           <div class="col-2 d-flex justify-content-end">
-            <button class="grade">Grade</button>
+            <button class="grade">Chấm điểm lại</button>
           </div>
-          {% else %}
+        </div>
+      </li>
+    {% endfor %}
+
+    {% for team in not_graded_teams %}
+      <li class="list-group-item lstTeam text-white">
+        <div class="row">
+          <div class="col-7">
+              <h4>{{ team.name }}</h4>
+          </div>
+          <div class="col-3 d-flex justify-content-end">
+            <a class="text-white link" href="{{ team.slide }}">
+              <i class="far fa-2x fa-fw fa-file-alt"></i>
+            </a>
+            <a class="text-white link" href="{{ team.github }}">
+              <i class="fab fa-2x fa-fw fa-github"></i>
+            </a>
+            {% if team.youtube %}
+              <a class="text-white link" href="{{ team.youtube }}">
+                <i class="fab fa-2x fa-fw fa-youtube"></i>
+              </a>
+            {% else %}
+              <a class="text-white link-hidden" href="{{ team.youtube }}">
+                <i class="fab fa-2x fa-fw fa-youtube"></i>
+              </a>
+            {% endif %}
+          </div>
           <div class="col-2 d-flex justify-content-end">
-            <button class="grade">Grade Again</button>
+            <button class="grade">Chấm điểm</button>
           </div>
-          {% endif %}
         </div>
       </li>
     {% endfor %}

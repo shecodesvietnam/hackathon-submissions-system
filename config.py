@@ -2,7 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
-    SECRET_KEY = os.getenv('SECRET_KEY') or 'Tallie1234'
+    SECRET_KEY = os.getenv('SECRET_KEY') or 'SheCodesHackathon2021'
     BASIC_AUTH_USERNAME = os.getenv("BASIC_AUTH_USERNAME") or 'admin'
     BASIC_AUTH_PASSWORD = os.getenv("BASIC_AUTH_PASSWORD") or '123456'
     MAIL_SERVER = os.getenv('MAIL_SERVER')
@@ -17,5 +17,3 @@ class Config(object):
     # ? For postgreSQL
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://postgres:123456@localhost/HackathonSubmission'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-    TEAMS_PER_PAGE = 5
