@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.forms import LoginForm, SubmissionForm, GradeForm
@@ -28,6 +28,9 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Sai tên đăng nhập hoặc mật khẩu.')
+            return redirect(url_for('login'))
+        if user.role.name == 'Hacker' and not user.has_confirm:
+            flash('You haven\'t confirm your team\'s account yet.')
             return redirect(url_for('login'))
         login_user(user, remember=True)
         if user.role.name == 'Mentor':
@@ -158,7 +161,7 @@ def grading_round_1(project_name):
         flash('Chấm điểm thành công!')
         return redirect(url_for('teams_round_1'))
 
-    return render_template('grading_round_1.html', form=form, project=project)
+    return render_template('grading_round_1.html', title='Grading Round 1 | Shecodes Hackathon', form=form, project=project)
 
 
 @app.route('/teams/round2/<project_name>/grading', methods=['GET', 'POST'])
@@ -180,4 +183,22 @@ def grading_round_2(project_name):
         flash('Chấm điểm thành công!')
         return redirect(url_for('teams_round_2'))
 
-    return render_template('grading_round_2.html', form=form, project=project)
+    return render_template('grading_round_2.html', title='Grading Round 2 | Shecodes Hackathon', form=form, project=project)
+
+
+@app.route('/verify_reply/<token>', methods=['GET', 'POST'])
+def verify_reply(token):
+    user = User.verify_generated_token(token)
+    if not user:
+        return jsonify('Verify account failed'), 400
+    user.has_confirm = True
+    db.session.add(user)
+    db.session.commit()
+    return render_template('email/verify_reply_success.html')
+
+
+@app.route('/test')
+def test():
+    user = User(name='The Impossible', username='the-impossible')
+    password = '#fs"15%@dXv'
+    return render_template('test.html', user=user, password=password)

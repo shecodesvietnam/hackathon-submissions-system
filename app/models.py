@@ -1,3 +1,4 @@
+import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy_utils import URLType
 from flask_login import UserMixin
@@ -10,6 +11,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(120), index=True, unique=True)
+    has_confirm = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(100))
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship('Role', backref='team')
@@ -34,6 +36,17 @@ class User(UserMixin, db.Model):
 
     def set_username(self):
         self.username = generate_username(self.name)
+
+    def get_generated_token(self):
+        return jwt.encode({'generated_token': self.password_hash}, app.config['SECRET_KEY'], algorithm='HS256')
+
+    @staticmethod
+    def verify_generated_token(token):
+        try:
+            password_hash = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['generated_token']
+        except:
+            return
+        return User.query.filter_by(password_hash=password_hash).first()
 
     def __str__(self) -> str:
         return f'{self.name}'

@@ -32,13 +32,15 @@ def init_admin(app):
     
     class UserModelView(ModelView):
         column_exclude_list = ('password_hash')
-        form_excluded_columns = ('username', 'password_hash', 'project', 'grade_round_1', 'grade_round_2')
+        form_excluded_columns = ('username', 'password_hash', 'project', 'grade_round_1', 'grade_round_2', 'has_confirm')
 
         def on_model_change(self, form, model, is_created):
             if is_created:
                 password = generate_random_password()
                 model.set_password(password)
                 model.set_username()
+                if model.role.name != 'Hacker':
+                    model.has_confirm = True
                 # send_team_account_email(model, password)
             return super().on_model_change(form, model, is_created)
 

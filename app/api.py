@@ -6,7 +6,7 @@ from app.models import User, Role, Project, GradeRound1, GradeRound2
 from app.middlewares import token_required
 
 
-@app.route('/auth', methods=['POST'])
+@app.route('/api/auth', methods=['POST'])
 def user_login():
     data = request.get_json()
     username = data['username']
@@ -24,7 +24,17 @@ def user_login():
     return jsonify(token)
 
 
-@app.route('/round1_top5', methods=['POST'])
+@app.route('/api/remove_not_confirm', methods=['DELETE'])
+def remove_not_confirm():
+    not_confirm_users = User.query.filter_by(has_confirm=False).all()
+    for not_confirm_user in not_confirm_users:
+        db.session.delete(not_confirm_user)
+        db.session.commit()
+    
+    return jsonify('Remove all not confirm users')
+
+
+@app.route('/api/round1_top5', methods=['POST'])
 @token_required
 def top5(decoded):
     user = User.query.filter_by(id=decoded['id']).first()

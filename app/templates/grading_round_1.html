@@ -5,6 +5,8 @@
   <div class="d-flex justify-content-center">
     <img class="logoJudge" src="{{ url_for('static', filename='images/svglogoWithoutBg.svg') }}" alt="SheCodes Logo">
   </div>
+  <h2 class="text-white text-center mb-3">Đội: {{ project.team.name }}</h2>
+  <h2 class="text-white text-center mb-3">Dự án: {{ project.name }}</h2>
   <form class="grade bg-dark" action="{{ url_for('grading_round_1', project_name=project.name) }}" method="POST">
     {{ form.hidden_tag() }}
 

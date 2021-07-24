@@ -6,6 +6,7 @@ from app import app, mail
 
 def send_async_email(app, msg):
     with app.app_context():
+        mail.connect()
         mail.send(msg)
 
 
@@ -17,19 +18,36 @@ def send_email(subject, sender, recipients, text_body, html_body):
 
 
 def send_team_account_email(user, password):
-    if user.is_judge:
+    if user.role.name == 'Judge':
         send_email(
-            '[Shecodes Hackathon] Your judge\'s account',
+            '[IMPORTANT] Your judge\'s account',
             sender=app.config['ADMINS'][0],
             recipients=[user.email],
             text_body=render_template('email/send_info_judge.txt', user=user, password=password),
             html_body=render_template('email/send_info_judge.html', user=user, password=password)
         )
-    else:
+    elif user.role.name == 'Mentor':
         send_email(
-            '[Shecodes Hackathon] Your team\'s account',
+            '[IMPORTANT] Your mentor\'s account',
             sender=app.config['ADMINS'][0],
             recipients=[user.email],
-            text_body=render_template('email/send_info_participant.txt', user=user, password=password),
-            html_body=render_template('email/send_info_participant.html', user=user, password=password)
+            text_body=render_template('email/send_info_mentor.txt', user=user, password=password),
+            html_body=render_template('email/send_info_mentor.html', user=user, password=password)
+        )
+    elif user.role.name == 'Hacker':
+        token = user.get_generated_token()
+        send_email(
+            '[IMPORTANT] Your team\'s account',
+            sender=app.config['ADMINS'][0],
+            recipients=[user.email],
+            text_body=render_template('email/send_info_hacker.txt', user=user, password=password, token=token),
+            html_body=render_template('email/send_info_hacker.html', user=user, password=password, token=token)
+        )
+    elif user.role.name == 'Admin':
+        send_email(
+            '[IMPORTANT] Your admin\'s account',
+            sender=app.config['ADMINS'][0],
+            recipients=[user.email],
+            text_body=render_template('email/send_info_admin.txt', user=user, password=password),
+            html_body=render_template('email/send_info_admin.html', user=user, password=password)
         )

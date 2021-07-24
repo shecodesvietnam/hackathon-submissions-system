@@ -1,0 +1,11 @@
+<p>Dear {{ user.name }},</p>
+<p>Here is your mentor's account</p>
+<p>Username: {{ user.username }}</p>
+<p>Password: {{ password }}</p>
+<p>
+    To login now, 
+    <a href="{{ url_for('login', _external=True) }}">click here</a>.
+</p>
+<p>Please remember not to lose this email by any mean.</p>
+<p>Sincerely,</p>
+<p>The Shecodes Hackathon Team</p>

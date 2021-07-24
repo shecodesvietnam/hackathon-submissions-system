@@ -1,0 +1,9 @@
+Dear {{ user.name }},
+Here is your mentor's account
+Username: {{ user.username }}
+Password: {{ password }}
+To login now, click on the following link:
+{{ url_for('login', _external=True) }}
+Please remember not to lose this email by any mean.
+Sincerely,
+The Shecodes Hackathon Team

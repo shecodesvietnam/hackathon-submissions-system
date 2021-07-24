@@ -1,0 +1,24 @@
+<div style="background-color: #212529; padding: 10rem">
+    <div style="display: flex; justify-content: center;">
+        <img src="{{ url_for('static', filename='images/svglogoWithoutBg.svg') }}" alt="SheCodes Logo" style="width: 250px; margin-bottom: 1rem;">
+    </div>
+    <div style="margin-left: 1.5rem; font-family: Arial; color: #eee">
+        <p>Dear team {{ user.name }},</p>
+        <br>
+        <p>We are proudly announcing that your team is now registered as a team in Shecodes Hackathon competition.</p>
+        <p>Here is your team's account</p>
+        <p>Username: {{ user.username }}</p>
+        <p>Password: {{ password }}</p>
+        <p>
+            To confirm that you've received this email, 
+            <a href="{{ url_for('verify_reply', token=token, _external=True) }}" style="color: #fff;">click here</a>.
+        </p>
+        <p>Alternatively, you can paste the following link in your browser's address bar:</p>
+        <p>{{ url_for('verify_reply', token=token, _external=True) }}</p>
+        <p>If you didn't use this email to register for the hackathon then simply ignore this message.</p>
+        <p><strong>Please remember not to lose this email by any mean. Your account's username and password cannot be changed.</strong></p>
+        <br>
+        <p>Sincerely,</p>
+        <p>BTC SheCodes</p>
+    </div>
+</div>
