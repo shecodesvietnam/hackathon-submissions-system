@@ -56,7 +56,7 @@ class Role(db.Model):
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    name = db.Column(db.String(100))
+    name = db.Column(db.String(100), index=True, unique=True)
     slide = db.Column(URLType)
     github = db.Column(URLType)
     youtube = db.Column(URLType)

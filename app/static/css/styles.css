@@ -37,7 +37,31 @@ input{
   color: #000000;
 }
 
-.submitBtn:hover{
+.submitBtnLarge{
+  margin-top: 2rem;
+  background: linear-gradient(98.26deg, #55A9DD 0%, #F39BBD 100%);
+  border-radius: 10px;
+  width: 200px;
+  color: #000000;
+}
+
+.logoutBtnContainer{
+  position: absolute;
+  right: 10px;
+  bottom: 20px;
+}
+
+.logoutBtn{
+  margin-top: 2rem;
+  background: linear-gradient(98.26deg, #55A9DD 0%, #F39BBD 100%);
+  border-radius: 10px;
+  width: 100px;
+  color: #000000;
+}
+
+.submitBtn:hover, 
+.submitBtnLarge:hover,
+.logoutBtn:hover{
   background: linear-gradient(98.26deg, #E91F6F 0%, #5056A1 100%);
   color: #FFFFFF;
 }
@@ -57,6 +81,9 @@ input{
 .grade{
   color: #6F7DFF;
   /* float: right; */
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: .4rem;
   margin-right: 1.5rem;
   background-color: #000;
   border: 0;

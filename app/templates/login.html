@@ -6,15 +6,15 @@
     <form class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" method="POST">
       {{ form.hidden_tag() }}
       <div class="d-flex justify-content-center">
-        <img class="logoLogin" src="../static/images/svglogoWithoutBg.svg" alt="SheCodes Logo">
+        <img class="logoLogin" src="{{ url_for('static', filename='images/svglogoWithoutBg.svg') }}" alt="SheCodes Logo">
       </div>
       <div class="form-group">
         {{ form.username.label(class="text-white") }}
-        {{ form.username(class="form-control text-white bg-dark", placeholder="Username") }}
+        {{ form.username(class="form-control text-white bg-dark", placeholder="Tên đăng nhập") }}
       </div>
       <div class="form-group">
         {{ form.password.label(class="text-white") }}
-        {{ form.password(class="form-control text-white bg-dark", placeholder="Password") }}
+        {{ form.password(class="form-control text-white bg-dark", placeholder="Mật khẩu") }}
       </div>
       <div class="d-flex justify-content-center">
         {{ form.submit(class="btn submitBtn") }}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="d-flex justify-content-center">
+    <img class="logoJudge" src="{{ url_for('static', filename='images/svglogoWithoutBg.svg') }}" alt="SheCodes Logo">
+  </div>
+  <ul class="list-group col-12">
+    {% for project in projects %}
+      <li class="list-group-item lstTeam text-white">
+        <div class="row">
+          <div class="col-7">
+              <h4>{{ project.name }} {% if project.total %} ({{ project.total }} điểm) {% endif %} </h4>
+          </div>
+          <div class="col-3 d-flex justify-content-end">
+            <a class="text-white link" href="{{ project.slide }}">
+              <i class="far fa-2x fa-fw fa-file-alt"></i>
+            </a>
+            <a class="text-white link" href="{{ project.github }}">
+              <i class="fab fa-2x fa-fw fa-github"></i>
+            </a>
+            {% if project.youtube %}
+              <a class="text-white link" href="{{ project.youtube }}">
+                <i class="fab fa-2x fa-fw fa-youtube"></i>
+              </a>
+            {% else %}
+              <a class="text-white link-hidden" href="{{ project.youtube }}">
+                <i class="fab fa-2x fa-fw fa-youtube"></i>
+              </a>
+            {% endif %}
+          </div>
+          {% if project.total %}
+            <div class="col-2 d-flex justify-content-end">
+              <a href="{{ url_for('grading_round_2', project_name=project.name) }}" class="grade">Chấm điểm lại</a>
+            </div>
+          {% else %}
+            <div class="col-2 d-flex justify-content-end">
+              <a href="{{ url_for('grading_round_2', project_name=project.name) }}" class="grade">Chấm điểm</a>
+            </div>
+          {% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="logoutBtnContainer">
+    <a href="{{ url_for('logout') }}" class="btn logoutBtn">Đăng xuất</a>
+  </div>
+</div>
+{% endblock %}

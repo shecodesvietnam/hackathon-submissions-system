@@ -3,68 +3,72 @@
 {% block content %}
 <div class="container">
   <div class="d-flex justify-content-center">
-    <img class="logoJudge" src="../static/images/svglogoWithoutBg.svg" alt="SheCodes Logo">
+    <img class="logoJudge" src="{{ url_for('static', filename='images/svglogoWithoutBg.svg') }}" alt="SheCodes Logo">
   </div>
-  <ul class="list-group col-12">
-    {% for team in graded_teams %}
-      <li class="list-group-item lstTeam text-white">
-        <div class="row">
-          <div class="col-7">
-              <h4>{{ team.name }} ({{ team.total }} điểm)</h4>
-          </div>
-          <div class="col-3 d-flex justify-content-end">
-            <a class="text-white link" href="{{ team.slide }}">
-              <i class="far fa-2x fa-fw fa-file-alt"></i>
-            </a>
-            <a class="text-white link" href="{{ team.github }}">
-              <i class="fab fa-2x fa-fw fa-github"></i>
-            </a>
-            {% if team.youtube %}
-              <a class="text-white link" href="{{ team.youtube }}">
-                <i class="fab fa-2x fa-fw fa-youtube"></i>
-              </a>
-            {% else %}
-              <a class="text-white link-hidden" href="{{ team.youtube }}">
-                <i class="fab fa-2x fa-fw fa-youtube"></i>
-              </a>
-            {% endif %}
-          </div>
-          <div class="col-2 d-flex justify-content-end">
-            <button class="grade">Chấm điểm lại</button>
-          </div>
-        </div>
-      </li>
-    {% endfor %}
+  <form class="grade bg-dark" action="{{ url_for('grading_round_2', project_name=project.name) }}" method="POST">
+    {{ form.hidden_tag() }}
 
-    {% for team in not_graded_teams %}
-      <li class="list-group-item lstTeam text-white">
-        <div class="row">
-          <div class="col-7">
-              <h4>{{ team.name }}</h4>
-          </div>
-          <div class="col-3 d-flex justify-content-end">
-            <a class="text-white link" href="{{ team.slide }}">
-              <i class="far fa-2x fa-fw fa-file-alt"></i>
-            </a>
-            <a class="text-white link" href="{{ team.github }}">
-              <i class="fab fa-2x fa-fw fa-github"></i>
-            </a>
-            {% if team.youtube %}
-              <a class="text-white link" href="{{ team.youtube }}">
-                <i class="fab fa-2x fa-fw fa-youtube"></i>
-              </a>
-            {% else %}
-              <a class="text-white link-hidden" href="{{ team.youtube }}">
-                <i class="fab fa-2x fa-fw fa-youtube"></i>
-              </a>
-            {% endif %}
-          </div>
-          <div class="col-2 d-flex justify-content-end">
-            <button class="grade">Chấm điểm</button>
-          </div>
+    <h3 class="criteria text-white">Tính sáng tạo (15đ)</h3>
+    <div id="create-fields">
+      {% for creative_button in form.creative %}
+        <div class="form-check">
+          {{ creative_button(class='form-check-input') }}
+          {{ creative_button.label(class='form-check-label text-white') }}
         </div>
-      </li>
-    {% endfor %}
-  </ul>
+      {% endfor %}
+    </div>
+
+    <h3 class="criteria text-white">Mức độ accessible (Tính hữu dụng & thực tế) (30đ)</h3>
+    <div id="accessible-fields">
+      {% for accessible_button in form.accessible %}
+        <div class="form-check">
+          {{ accessible_button(class='form-check-input') }}
+          {{ accessible_button.label(class='form-check-label text-white') }}
+        </div>
+      {% endfor %}
+    </div>
+
+    <h3 class="criteria text-white">Tính công nghệ & thiết kế (40đ) </h3>
+    <div id="tech-fields">
+      <div class="tech-field">
+        {{ form.techOption1.label(class='text-white') }}
+        {{ form.techOption1(class='form-control bg-dark text-white', value='0') }}
+      </div>
+      <div class="tech-field">
+        {{ form.techOption2.label(class='text-white') }}
+        {{ form.techOption2(class='form-control bg-dark text-white', value='0') }}
+      </div>
+      <div class="tech-field">
+        {{ form.techOption3.label(class='text-white') }}
+        {{ form.techOption3(class='form-control bg-dark text-white', value='0') }}
+      </div>
+    </div>
+
+    <h3 class="criteria text-white">Demo (15đ)</h3>
+    <div id="demo-fields">
+      {% for demo_button in form.demo %}
+        <div class="form-check">
+          {{ demo_button(class='form-check-input') }}
+          {{ demo_button.label(class='form-check-label text-white') }}
+        </div>
+      {% endfor %}
+    </div>
+    
+    <h3 class="criteria text-white">Điểm pitching (Điểm cộng, tối đa 10đ)</h3>
+    <div id="pitching-field">
+      {{ form.pitching(class='form-control bg-dark text-white', value='0') }}
+    </div>
+
+    <h3 class="criteria text-white">Tổng điểm: <span id="totalGrade"></span> điểm</h3>
+
+    <div class="d-flex justify-content-center">
+      {{ form.submit(class='btn submitBtnLarge mt-5 mb-5') }}
+    </div>
+
+  </form>
 </div>
+{% endblock %}
+
+{% block js_scripts %}
+  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 {% endblock %}

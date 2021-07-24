@@ -6,7 +6,7 @@
     <form class="col-12 col-sm-12 col-md-8 col-lg-6 col-xl-5" method="POST">
       {{ form.hidden_tag() }}
       <div class="d-flex justify-content-center">
-        <img class="logo" src="../static/images/svglogoWithoutBg.svg" alt="SheCodes Logo">
+        <img class="logo" src="{{ url_for('static', filename='images/svglogoWithoutBg.svg') }}" alt="SheCodes Logo">
       </div>
       <h1 class="text-white text-center mb-3">
            Welcome! <br>
@@ -14,20 +14,24 @@
       </h1>
       <div class="form-group">
         {{ form.slide.label(class="text-white") }}
-        {{ form.slide(class="form-control bg-dark text-white", placeholder="Slide Link") }}
+        {{ form.slide(class="form-control bg-dark text-white", placeholder="Slide link") }}
       </div>
       <div class="form-group">
         {{ form.github.label(class="text-white") }}
-        {{ form.github(class="form-control bg-dark text-white", placeholder="Github Link") }}
+        {{ form.github(class="form-control bg-dark text-white", placeholder="Github link") }}
       </div>
       <div class="form-group">
         {{ form.youtube.label(class="text-white") }}
-        {{ form.youtube(class="form-control bg-dark text-white", placeholder="Youtube Link") }}
+        {{ form.youtube(class="form-control bg-dark text-white", placeholder="Youtube link") }}
       </div>
       <div class="d-flex justify-content-center">
         {{ form.submit(class="btn submitBtn") }}
       </div>
     </form>
+  </div>
+
+  <div class="logoutBtnContainer">
+    <a href="{{ url_for('logout') }}" class="btn logoutBtn">Đăng xuất</a>
   </div>
 </div>
 {% endblock %}

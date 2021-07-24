@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
-from app.forms import LoginForm, SubmissionForm
+from app.forms import LoginForm, SubmissionForm, GradeForm
 from app.models import User, Role, Project, GradeRound1, GradeRound2
 from app.utils import is_valid_url
 
@@ -18,24 +18,30 @@ def login():
         if current_user.role.name == 'Hacker':
             return redirect(url_for('submit'))
         elif current_user.role.name == 'Mentor':
-            return redirect(url_for('grading_round_1'))
+            return redirect(url_for('teams_round_1'))
         elif current_user.role.name == 'Judge':
-            return redirect(url_for('grading_round_2'))
+            return redirect(url_for('teams_round_2'))
 
     form = LoginForm()
     
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Sai tên đăng nhập hoặc mật khẩu.')
             return redirect(url_for('login'))
         login_user(user, remember=True)
         if user.role.name == 'Mentor':
-            return redirect(url_for('grading_round_1'))
+            return redirect(url_for('teams_round_1'))
         elif user.role.name == 'Judge':
-            return redirect(url_for('grading_round_2'))
+            return redirect(url_for('teams_round_2'))
         return redirect(url_for('submit'))
     return render_template('login.html', form=form, title='Login | Shecodes Hackathon')
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 
 @app.route('/submit', methods=['GET', 'POST'])
@@ -49,7 +55,7 @@ def submit():
 
     if form.validate_on_submit():
         if not is_valid_url(form.slide.data) or not is_valid_url(form.github.data):
-            flash('Invalid Url, please check again.')
+            flash('Đường dẫn không hợp lệ, xin hãy thử lại.')
             return redirect(url_for('submit'))
         project.slide = form.slide.data
         project.github = form.github.data
@@ -57,10 +63,10 @@ def submit():
             if is_valid_url(form.youtube.data):
                 project.youtube = form.youtube.data
             else:
-                flash('Invalid Url, please check again.')
+                flash('Đường dẫn không hợp lệ, xin hãy thử lại.')
                 return redirect(url_for('submit'))
         db.session.commit()
-        flash('Submitted successfully')
+        flash('Nộp bài thành công!')
         return redirect(url_for('submit'))
     elif request.method == 'GET':
         form.slide.data = project.slide
@@ -70,9 +76,9 @@ def submit():
     return render_template('submit.html', form=form, title='Submission | Shecodes Hackathon')
 
 
-@app.route('/grading/round1')
+@app.route('/teams/round1')
 @login_required
-def grading_round_1():
+def teams_round_1():
     if current_user.role.name != 'Mentor':
         return render_template('401.html'), 401
 
@@ -95,35 +101,83 @@ def grading_round_1():
     ) 
     """)
 
-    graded_teams = []
-    not_graded_teams = []
+    graded_projects = []
+    not_graded_projects = []
 
     for row in get_graded_projects:
-        graded_teams.append(row)
+        graded_projects.append(row)
 
     for row in get_not_graded_projects:
-        not_graded_teams.append(row)
+        not_graded_projects.append(row)
 
-    return render_template('grading_round_1.html', title='Round 1 | Shecodes Hackathon', graded_teams=graded_teams, not_graded_teams=not_graded_teams)
+    return render_template('teams_round_1.html', title='Round 1 | Shecodes Hackathon', graded_projects=graded_projects, not_graded_projects=not_graded_projects)
 
 
-@app.route('/grading/round2')
+@app.route('/teams/round2')
 @login_required
-def grading_round_2():
+def teams_round_2():
     if current_user.role.name != 'Judge':
         return render_template('401.html'), 401
 
-    get_round_2_projects = db.session.execute(f"""
-    select project.id as project_id, project.name, project.slide, project.github, project.youtube, graderound2.total
-    from project
-    join graderound2 on graderound2.project_id = project.id
-    join users on graderound2.judge_id = users.id
-    where judge_id = {current_user.id};
+    top5_round1 = db.session.execute(f"""
+    select project.id, project.name, project.slide, project.github, project.youtube, graderound2.total
+    from graderound2
+        join project on graderound2.project_id = project.id
+        join users on graderound2.judge_id = users.id
+    where graderound2.judge_id = {current_user.id};
     """)
 
-    teams = []
+    projects = []
 
-    for row in get_round_2_projects:
-        teams.append(row)
+    for row in top5_round1:
+        projects.append(row)
 
-    return render_template('grading_round_2.html', title='Round 2 | Shecodes Hackathon', teams=teams)
+    return render_template('teams_round_2.html', title='Round 2 | Shecodes Hackathon', projects=projects)
+
+
+@app.route('/teams/round1/<project_name>/grading', methods=['GET', 'POST'])
+@login_required
+def grading_round_1(project_name):
+    if current_user.role.name != 'Mentor':
+        return render_template('401.html'), 401
+
+    form = GradeForm()
+    project = Project.query.filter_by(name=project_name).first()
+
+    if request.method == 'POST':
+        total = int(form.creative.data) + int(form.accessible.data) +int(form.demo.data) + int(form.techOption1.data) + int(form.techOption2.data) + int(form.techOption3.data) + int(form.pitching.data)
+        if GradeRound1.query.filter_by(project_id=project.id).first():
+            g = GradeRound1.query.filter_by(project_id=project.id).first()
+            g.total = total
+            db.session.add(g)
+            db.session.commit()
+        else:
+            g = GradeRound1(mentor_id=current_user.id, project_id=project.id, total=total)
+            db.session.add(g)
+            db.session.commit()
+        flash('Chấm điểm thành công!')
+        return redirect(url_for('teams_round_1'))
+
+    return render_template('grading_round_1.html', form=form, project=project)
+
+
+@app.route('/teams/round2/<project_name>/grading', methods=['GET', 'POST'])
+@login_required
+def grading_round_2(project_name):
+    print(current_user.role.name)
+    if current_user.role.name != 'Judge':
+        return render_template('401.html'), 401
+
+    form = GradeForm()
+    project = Project.query.filter_by(name=project_name).first()
+
+    if request.method == 'POST':
+        total = int(form.creative.data) + int(form.accessible.data) +int(form.demo.data) + int(form.techOption1.data) + int(form.techOption2.data) + int(form.techOption3.data) + int(form.pitching.data)
+        g = GradeRound2.query.filter_by(project_id=project.id).first()
+        g.total = total
+        db.session.add(g)
+        db.session.commit()
+        flash('Chấm điểm thành công!')
+        return redirect(url_for('teams_round_2'))
+
+    return render_template('grading_round_2.html', form=form, project=project)
