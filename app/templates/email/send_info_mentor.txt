@@ -1,9 +1,16 @@
 Dear {{ user.name }},
-Here is your mentor's account
+Thank you for joining the hackathon as a mentor this year.
+Here is your mentor's account for grading the projects:
 Username: {{ user.username }}
 Password: {{ password }}
 To login now, click on the following link:
 {{ url_for('login', _external=True) }}
-Please remember not to lose this email by any mean.
+ONLY you can access this account. Please remember the username and password CANNOT be changed and DO NOT lose this email by any means.
 Sincerely,
 The Shecodes Hackathon Team
+Tel: 0375836152 (Diệp Vũ - Program Manager)
+     0901544083 (Khuyên Nguyễn - Program Manager)
+Email: diepvu.shecodes@gmail.com
+       khuyennguyen.shecodes@gmail.com
+Facebook: https://www.facebook.com/shecodesvietnam
+Website: https://www.shecodesvietnam.com

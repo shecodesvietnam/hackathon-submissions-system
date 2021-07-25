@@ -1,11 +1,17 @@
 Dear team {{ user.name }},
-We are proudly announcing that your team is now registered as a team in Shecodes Hackathon competition.
-Here is your team's account
+Congratulations! Your team is now officially registered for SheCodes Hackathon 2021
+Here is your team's account for submitting the project:
 Username: {{ user.username }}
 Password: {{ password }}
 To confirm that you've received this email, click on the following link:
 {{ url_for('verify_reply', token=token, _external=True) }}
 If you didn't use this email to register for the hackathon then simply ignore this message.
-Please remember not to lose this email by any mean. Your account's username and password cannot be changed.
+You can ONLY share your team's account to your teammates. Please remember the username and password CANNOT be changed and DO NOT lose this email by any means.
 Sincerely,
 The Shecodes Hackathon Team
+Tel: 0375836152 (Diệp Vũ - Program Manager)
+     0901544083 (Khuyên Nguyễn - Program Manager)
+Email: diepvu.shecodes@gmail.com
+       khuyennguyen.shecodes@gmail.com
+Facebook: https://www.facebook.com/shecodesvietnam
+Website: https://www.shecodesvietnam.com

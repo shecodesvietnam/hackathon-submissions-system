@@ -1,11 +1,27 @@
-<p>Dear {{ user.name }},</p>
-<p>Here is your judge's account</p>
-<p>Username: {{ user.username }}</p>
-<p>Password: {{ password }}</p>
-<p>
-    To login now, 
-    <a href="{{ url_for('login', _external=True) }}">click here</a>.
+<p style="padding: 0; margin: 0">Dear {{ user.name }},</p>
+<br style="padding: 0; margin: 0">
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0"><strong style="color: red;">Thank you</strong> for joining the hackathon as a <strong>judge</strong> this year.</p>
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0"><strong>Here is your judge's account for grading the projects:</strong></p>
+<p style="padding: 0; margin: 0">Username: {{ user.username }}</p>
+<p style="padding: 0; margin: 0">Password: {{ password }}</p>
+<p style="padding: 0; margin: 0">
+    To login now, click
+    <a href="{{ url_for('login', _external=True) }}"> here</a>.
 </p>
-<p>Please remember not to lose this email by any mean.</p>
-<p>Sincerely,</p>
-<p>The Shecodes Hackathon Team</p>
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0"><strong>ONLY</strong> you can access this account. Please remember the username and password <strong>CANNOT</strong> be changed and <strong>DO NOT</strong> lose this email by any means.</p>
+<br style="padding: 0; margin: 0">
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0">Sincerely,</p>
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0">The Shecodes Hackathon Team</p>
+<br style="padding: 0; margin: 0">
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0"><strong>Tel: </strong>0375836152 (Diệp Vũ - Program Manager)</p>
+<p style="padding: 0; margin: 0">&nbsp;&nbsp;&nbsp;&nbsp;0901544083 (Khuyên Nguyễn - Program Manager)</p>
+<p style="padding: 0; margin: 0"><strong>Email: </strong><a href="mailto:diepvu.shecodes@gmail.com">diepvu.shecodes@gmail.com</a></p>
+<p style="padding: 0; margin: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:khuyennguyen.shecodes@gmail.com">khuyennguyen.shecodes@gmail.com</a></p>
+<p style="padding: 0; margin: 0"><strong>Facebook: </strong><a href="https://www.facebook.com/shecodesvietnam">https://www.facebook.com/shecodesvietnam</a></p>
+<p style="padding: 0; margin: 0"><strong>Website: </strong><a href="https://www.shecodesvietnam.com">https://www.shecodesvietnam.com</a></p>

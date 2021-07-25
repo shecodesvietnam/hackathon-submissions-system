@@ -1,15 +1,32 @@
-<p>Dear team {{ user.name }},</p>
-<p>We are proudly announcing that your team is now registered as a team in Shecodes Hackathon competition.</p>
-<p>Here is your team's account</p>
-<p>Username: {{ user.username }}</p>
-<p>Password: {{ password }}</p>
-<p>
-    To confirm that you've received this email, 
-    <a href="{{ url_for('verify_reply', token=token, _external=True) }}">click here</a>.
+<p style="padding: 0; margin: 0">Dear team {{ user.name }},</p>
+<br style="padding: 0; margin: 0">
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0"><strong style="color: red;">Congratulations!</strong> Your team is now officially registered for SheCodes Hackathon 2021.</p>
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0"><strong>Here is your team's account for submitting the project:</strong></p>
+<p style="padding: 0; margin: 0">Username: {{ user.username }}</p>
+<p style="padding: 0; margin: 0">Password: {{ password }}</p>
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0">
+    To confirm that you've received this email, click
+    <a href="{{ url_for('verify_reply', token=token, _external=True) }}"> here</a>.
 </p>
-<p>Alternatively, you can paste the following link in your browser's address bar:</p>
-<p>{{ url_for('verify_reply', token=token, _external=True) }}</p>
-<p>If you didn't use this email to register for the hackathon then simply ignore this message.</p>
-<p><strong>Please remember not to lose this email by any mean. Your account's username and password cannot be changed.</strong></p>
-<p>Sincerely,</p>
-<p>The Shecodes Hackathon Team</p>
+<p style="padding: 0; margin: 0">Alternatively, you can paste the following link in your browser's address bar:</p>
+<p style="padding: 0; margin: 0">{{ url_for('verify_reply', token=token, _external=True) }}</p>
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0">If you didn't use this email to register for the hackathon then simply ignore this message.</p>
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0">You can <strong>ONLY</strong> share your team's account to <strong>your teammates</strong>. Please remember the username and password <strong>CANNOT</strong> be changed and <strong>DO NOT</strong> lose this email by any means.</p>
+<br style="padding: 0; margin: 0">
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0">Sincerely,</p>
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0">The Shecodes Hackathon Team</p>
+<br style="padding: 0; margin: 0">
+<br style="padding: 0; margin: 0">
+<p style="padding: 0; margin: 0"><strong>Tel: </strong>0375836152 (Diệp Vũ - Program Manager)</p>
+<p style="padding: 0; margin: 0">&nbsp;&nbsp;&nbsp;&nbsp;0901544083 (Khuyên Nguyễn - Program Manager)</p>
+<p style="padding: 0; margin: 0"><strong>Email: </strong><a href="mailto:diepvu.shecodes@gmail.com">diepvu.shecodes@gmail.com</a></p>
+<p style="padding: 0; margin: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:khuyennguyen.shecodes@gmail.com">khuyennguyen.shecodes@gmail.com</a></p>
+<p style="padding: 0; margin: 0"><strong>Facebook: </strong><a href="https://www.facebook.com/shecodesvietnam">https://www.facebook.com/shecodesvietnam</a></p>
+<p style="padding: 0; margin: 0"><strong>Website: </strong><a href="https://www.shecodesvietnam.com">https://www.shecodesvietnam.com</a></p>
