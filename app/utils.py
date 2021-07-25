@@ -5,7 +5,8 @@ import re
 
 def generate_random_password(length=12):
     # Get random password of given length with letters, digits, and symbols
-    characters = string.ascii_letters + string.digits + string.punctuation
+    # characters = string.ascii_letters + string.digits + string.punctuation
+    characters = string.ascii_letters + string.digits
     password = ''.join(random.choice(characters) for _ in range(length))
     print(f'password = {password}')
     return password
