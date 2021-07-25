@@ -73,6 +73,7 @@ class Project(db.Model):
     slide = db.Column(URLType)
     github = db.Column(URLType)
     youtube = db.Column(URLType)
+    timestamp = db.Column(db.DateTime, index=True)
     team = db.relationship('User', backref='project')
 
     def __repr__(self) -> str:

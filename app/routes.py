@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -68,6 +69,8 @@ def submit():
             else:
                 flash('Đường dẫn không hợp lệ, xin hãy thử lại.')
                 return redirect(url_for('submit'))
+        project.timestamp = datetime.now()
+        db.session.add(project)
         db.session.commit()
         flash('Nộp bài thành công!')
         return redirect(url_for('submit'))
@@ -195,10 +198,3 @@ def verify_reply(token):
     db.session.add(user)
     db.session.commit()
     return render_template('email/verify_reply_success.html')
-
-
-@app.route('/test')
-def test():
-    user = User(name='The Impossible', username='the-impossible')
-    password = '#fs"15%@dXv'
-    return render_template('test.html', user=user, password=password)

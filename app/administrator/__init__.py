@@ -1,8 +1,10 @@
+from flask_admin.base import AdminIndexView, expose
 from werkzeug.exceptions import HTTPException
 from flask import Response, redirect
 from flask_basicauth import BasicAuth
 from flask_admin import Admin
 from flask_admin.contrib import sqla
+from sqlalchemy import func
 from app import db
 from app.models import User, Role, Project, GradeRound1, GradeRound2
 from app.utils import generate_random_password
@@ -54,7 +56,7 @@ def init_admin(app):
 
     
     class ProjectModelView(ModelView):
-        form_excluded_columns = ('grade_round_1', 'grade_round_2')
+        form_excluded_columns = ('grade_round_1', 'grade_round_2', 'timestamp')
         def on_model_change(self, form, model, is_created):
             return super().on_model_change(form, model, is_created)
         
@@ -76,7 +78,21 @@ def init_admin(app):
         # def on_model_change(self, form, model, is_created):
         #     return super().on_model_change(form, model, is_created)
 
-    admin = Admin(app)
+    class HomeView(AdminIndexView):
+        @expose('/')
+        def index(self):
+            command = f"""
+            select project.id, project.name, project.slide, project.github, project.youtube, sum(graderound2.total) as total
+            from graderound2
+                join project on graderound2.project_id = project.id
+                join users on graderound2.judge_id = users.id
+            group by project.id
+            order by total desc
+            """
+            projects = db.session.execute(command)
+            return self.render('admin/home.html', projects=projects)
+
+    admin = Admin(app, index_view=HomeView(), template_mode='bootstrap3')
     admin.add_view(UserModelView(User, db.session))
     admin.add_view(RoleModelView(Role, db.session))
     admin.add_view(ProjectModelView(Project, db.session))

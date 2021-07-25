@@ -1,0 +1,40 @@
+{% extends 'admin/master.html' %}
+
+{% block head %}
+    {{ super() }}
+    <script src="https://kit.fontawesome.com/b8c5196452.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-home.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <ul>
+      {% for project in projects %}
+        <li class="list-item">
+          <div class="flex">
+            <div>
+                <h4>{{ project.name }} {% if project.total %} ({{ project.total }} điểm) {% endif %} </h4>
+            </div>
+            <div class="item-right">
+              <a class="link" href="{{ project.slide }}">
+                <i class="far fa-2x fa-fw fa-file-alt"></i>
+              </a>
+              <a class="link" href="{{ project.github }}">
+                <i class="fab fa-2x fa-fw fa-github"></i>
+              </a>
+              {% if project.youtube %}
+                <a class="link" href="{{ project.youtube }}">
+                  <i class="fab fa-2x fa-fw fa-youtube"></i>
+                </a>
+              {% else %}
+                <a class="link link-hidden" href="{{ project.youtube }}">
+                  <i class="fab fa-2x fa-fw fa-youtube"></i>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+</div>
+{% endblock %}
