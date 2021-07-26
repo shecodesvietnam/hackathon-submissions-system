@@ -33,7 +33,8 @@ def init_admin(app):
 
     
     class UserModelView(ModelView):
-        column_exclude_list = ('password_hash')
+        column_list = ('id', 'role', 'username', 'name', 'email', 'has_confirm')
+        # column_exclude_list = ('password_hash')
         form_excluded_columns = ('username', 'password_hash', 'project', 'grade_round_1', 'grade_round_2', 'has_confirm')
 
         def on_model_change(self, form, model, is_created):
@@ -43,7 +44,7 @@ def init_admin(app):
                 model.set_username()
                 if model.role.name != 'Hacker':
                     model.has_confirm = True
-                send_team_account_email(model, password)
+                # send_team_account_email(model, password)
             return super().on_model_change(form, model, is_created)
 
     
@@ -56,27 +57,30 @@ def init_admin(app):
 
     
     class ProjectModelView(ModelView):
+        column_list = ('id', 'team', 'name', 'slide', 'github', 'youtube', 'timestamp')
         form_excluded_columns = ('grade_round_1', 'grade_round_2', 'timestamp')
         def on_model_change(self, form, model, is_created):
             return super().on_model_change(form, model, is_created)
         
     class GradeRound1ModelView(ModelView):
-        can_create = False
-        can_edit = False
-        can_delete = False
+        # can_create = False
+        # can_edit = False
+        # can_delete = False
         column_list = ('mentor_id', 'project_id', 'total')
+        form_columns = ('mentor_id', 'project_id')
 
-        # def on_model_change(self, form, model, is_created):
-        #     return super().on_model_change(form, model, is_created)
+        def on_model_change(self, form, model, is_created):
+            return super().on_model_change(form, model, is_created)
 
     class GradeRound2ModelView(ModelView):
-        can_create = False
-        can_edit = False
-        can_delete = False
+        # can_create = False
+        # can_edit = False
+        # can_delete = False
         column_list = ('judge_id', 'project_id', 'total')
+        form_columns = ('judge_id', 'project_id')
 
-        # def on_model_change(self, form, model, is_created):
-        #     return super().on_model_change(form, model, is_created)
+        def on_model_change(self, form, model, is_created):
+            return super().on_model_change(form, model, is_created)
 
     class HomeView(AdminIndexView):
         @expose('/')

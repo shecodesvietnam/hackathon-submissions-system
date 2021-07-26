@@ -15,7 +15,7 @@
       <label for="creative" class="text-white">Ý tưởng này hoàn toàn độc đáo, chưa tìm thấy tại thị trường Việt Nam. (11-15đ)</label>
       <label for="creative" class="text-white">Ý tưởng này đã tồn tại, tuy nhiên được phát triển và hoàn thiện theo một hướng mới để giải quyết vấn đề một cách hiệu quả hơn. (1-10đ)</label>
       <label for="creative" class="text-white">Ý tưởng này chưa có gì độc đáo và khó có thể cạnh tranh với các ý tưởng tương tự trong thị trường. (0đ)</label>
-      {{ form.creative(class='form-control bg-dark text-white', value="0") }}
+      {{ form.creative(class='form-control bg-dark text-white', value=0) }}
     </div>
 
     <h3 class="criteria text-white">Mức độ accessible (Tính hữu dụng & thực tế) (30đ)</h3>
@@ -24,22 +24,22 @@
       <label for="accessible" class="text-white">Ý tưởng này giải quyết một vấn đề ý nghĩa trong xã hội, mang đến tác động tích cực cho một nhóm đối tượng cụ thể về mặt kinh tế/môi trường/cộng đồng, tuy nhiên không thể thực hiện được vì Công nghệ thông tin chưa cho phép. (11-20đ)</label>
       <label for="accessible" class="text-white">Ý tưởng này có thể thực hiện được, tuy nhiên không thực sự giải quyết một vấn đề có ý nghĩa trong xã hội, và không mang đến tác động tích cực cho một nhóm đối tượng cụ thể nào. (1-10đ)</label>
       <label for="accessible" class="text-white">Ý tưởng này phi thực tế và không mang lại tác động tích cực cho một nhóm đối tượng cụ thể nào. (0đ)</label>
-      {{ form.accessible(class='form-control bg-dark text-white', value="0") }}
+      {{ form.accessible(class='form-control bg-dark text-white', value=0) }}
     </div>
 
     <h3 class="criteria text-white">Tính công nghệ & thiết kế (40đ) </h3>
     <div id="tech-fields">
       <div class="tech-field">
         {{ form.techOption1.label(class='text-white') }}
-        {{ form.techOption1(class='form-control bg-dark text-white', value='0') }}
+        {{ form.techOption1(class='form-control bg-dark text-white', value=0) }}
       </div>
       <div class="tech-field">
         {{ form.techOption2.label(class='text-white') }}
-        {{ form.techOption2(class='form-control bg-dark text-white', value='0') }}
+        {{ form.techOption2(class='form-control bg-dark text-white', value=0) }}
       </div>
       <div class="tech-field">
         {{ form.techOption3.label(class='text-white') }}
-        {{ form.techOption3(class='form-control bg-dark text-white', value='0') }}
+        {{ form.techOption3(class='form-control bg-dark text-white', value=0) }}
       </div>
     </div>
 
@@ -50,12 +50,12 @@
       <div>
         <label for="demo" class="text-white">Không có demo. (0đ)</label>
       </div>
-      {{ form.demo(class='form-control bg-dark text-white', value="0") }}
+      {{ form.demo(class='form-control bg-dark text-white', value=0) }}
     </div>
     
     <h3 class="criteria text-white">Điểm pitching (Điểm cộng, tối đa 10đ)</h3>
     <div id="pitching-field">
-      {{ form.pitching(class='form-control bg-dark text-white', value='0') }}
+      {{ form.pitching(class='form-control bg-dark text-white', value=0) }}
     </div>
 
     <h3 class="criteria text-white">Tổng điểm: <span id="totalGrade"></span> điểm</h3>

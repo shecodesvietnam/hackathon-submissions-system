@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.forms import LoginForm, SubmissionForm, GradeForm
 from app.models import User, Role, Project, GradeRound1, GradeRound2
-from app.utils import is_valid_url
+from app.utils import is_valid_url, get_local_time
 
 
 @app.route('/')
@@ -31,7 +31,11 @@ def login():
             flash('Sai tên đăng nhập hoặc mật khẩu.')
             return redirect(url_for('login'))
         if user.role.name == 'Hacker' and not user.has_confirm:
-            flash('You haven\'t confirm your team\'s account yet.')
+            flash('Bạn chưa xác nhận tài khoản của mình.')
+            return redirect(url_for('login'))
+        project = Project.query.filter_by(id=user.id).first()
+        if not project:
+            flash('Đội của bạn chưa đăng ký dự án với BTC.')
             return redirect(url_for('login'))
         login_user(user, remember=True)
         if user.role.name == 'Mentor':
@@ -39,7 +43,7 @@ def login():
         elif user.role.name == 'Judge':
             return redirect(url_for('teams_round_2'))
         return redirect(url_for('submit'))
-    return render_template('login.html', form=form, title='Login | Shecodes Hackathon')
+    return render_template('login.html', form=form, title='Đăng nhập | Shecodes Hackathon')
 
 
 @app.route('/logout')
@@ -69,8 +73,7 @@ def submit():
             else:
                 flash('Đường dẫn không hợp lệ, xin hãy thử lại.')
                 return redirect(url_for('submit'))
-        project.timestamp = datetime.now()
-        db.session.add(project)
+        project.timestamp = get_local_time()
         db.session.commit()
         flash('Nộp bài thành công!')
         return redirect(url_for('submit'))
@@ -79,7 +82,7 @@ def submit():
         form.github.data = project.github
         form.youtube.data = project.youtube
 
-    return render_template('submit.html', form=form, title='Submission | Shecodes Hackathon')
+    return render_template('submit.html', form=form, title='Nộp bài | Shecodes Hackathon')
 
 
 @app.route('/teams/round1')
@@ -116,7 +119,7 @@ def teams_round_1():
     for row in get_not_graded_projects:
         not_graded_projects.append(row)
 
-    return render_template('teams_round_1.html', title='Round 1 | Shecodes Hackathon', graded_projects=graded_projects, not_graded_projects=not_graded_projects)
+    return render_template('teams_round_1.html', title='Vòng 1 | Shecodes Hackathon', graded_projects=graded_projects, not_graded_projects=not_graded_projects)
 
 
 @app.route('/teams/round2')
@@ -138,7 +141,7 @@ def teams_round_2():
     for row in top5_round1:
         projects.append(row)
 
-    return render_template('teams_round_2.html', title='Round 2 | Shecodes Hackathon', projects=projects)
+    return render_template('teams_round_2.html', title='Vòng 2 | Shecodes Hackathon', projects=projects)
 
 
 @app.route('/teams/round1/<project_name>/grading', methods=['GET', 'POST'])
@@ -151,26 +154,23 @@ def grading_round_1(project_name):
     project = Project.query.filter_by(name=project_name).first()
 
     if request.method == 'POST':
-        total = int(form.creative.data) + int(form.accessible.data) +int(form.demo.data) + int(form.techOption1.data) + int(form.techOption2.data) + int(form.techOption3.data) + int(form.pitching.data)
+        total = form.creative.data + form.accessible.data +form.demo.data + form.techOption1.data + form.techOption2.data + form.techOption3.data + form.pitching.data
         if GradeRound1.query.filter_by(project_id=project.id).first():
             g = GradeRound1.query.filter_by(project_id=project.id).first()
             g.total = total
-            db.session.add(g)
             db.session.commit()
         else:
             g = GradeRound1(mentor_id=current_user.id, project_id=project.id, total=total)
-            db.session.add(g)
             db.session.commit()
         flash('Chấm điểm thành công!')
         return redirect(url_for('teams_round_1'))
 
-    return render_template('grading_round_1.html', title='Grading Round 1 | Shecodes Hackathon', form=form, project=project)
+    return render_template('grading_round_1.html', title='Chấm điểm vòng 1 | Shecodes Hackathon', form=form, project=project)
 
 
 @app.route('/teams/round2/<project_name>/grading', methods=['GET', 'POST'])
 @login_required
 def grading_round_2(project_name):
-    print(current_user.role.name)
     if current_user.role.name != 'Judge':
         return render_template('401.html'), 401
 
@@ -178,15 +178,14 @@ def grading_round_2(project_name):
     project = Project.query.filter_by(name=project_name).first()
 
     if request.method == 'POST':
-        total = int(form.creative.data) + int(form.accessible.data) +int(form.demo.data) + int(form.techOption1.data) + int(form.techOption2.data) + int(form.techOption3.data) + int(form.pitching.data)
+        total = form.creative.data + form.accessible.data +form.demo.data + form.techOption1.data + form.techOption2.data + form.techOption3.data + form.pitching.data
         g = GradeRound2.query.filter_by(project_id=project.id).first()
         g.total = total
-        db.session.add(g)
         db.session.commit()
         flash('Chấm điểm thành công!')
         return redirect(url_for('teams_round_2'))
 
-    return render_template('grading_round_2.html', title='Grading Round 2 | Shecodes Hackathon', form=form, project=project)
+    return render_template('grading_round_2.html', title='Chấm điểm vòng 2 | Shecodes Hackathon', form=form, project=project)
 
 
 @app.route('/verify_reply/<token>', methods=['GET', 'POST'])
@@ -195,6 +194,5 @@ def verify_reply(token):
     if not user:
         return jsonify('Verify account failed'), 400
     user.has_confirm = True
-    db.session.add(user)
     db.session.commit()
     return render_template('email/verify_reply_success.html')

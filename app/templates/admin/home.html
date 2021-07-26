@@ -8,33 +8,48 @@
 
 {% block body %}
 <div class="container">
-    <ul>
-      {% for project in projects %}
-        <li class="list-item">
-          <div class="flex">
+  <h1 class="title">Kết quả vòng 2: </h1>
+  <ul>
+    {% for project in projects %}
+      <li class="list-item">
+        <div class="flex">
+          {% if loop.index == 1 %}
             <div>
-                <h4>{{ project.name }} {% if project.total %} ({{ project.total }} điểm) {% endif %} </h4>
+              <h4>{{ project.name }} {% if project.total %} ({{ project.total }} điểm) {% endif %} <i class="fas fa-award" style="color: gold;"></i> </h4>
             </div>
-            <div class="item-right">
-              <a class="link" href="{{ project.slide }}">
-                <i class="far fa-2x fa-fw fa-file-alt"></i>
-              </a>
-              <a class="link" href="{{ project.github }}">
-                <i class="fab fa-2x fa-fw fa-github"></i>
-              </a>
-              {% if project.youtube %}
-                <a class="link" href="{{ project.youtube }}">
-                  <i class="fab fa-2x fa-fw fa-youtube"></i>
-                </a>
-              {% else %}
-                <a class="link link-hidden" href="{{ project.youtube }}">
-                  <i class="fab fa-2x fa-fw fa-youtube"></i>
-                </a>
-              {% endif %}
+          {% elif loop.index == 2 %}
+            <div>
+              <h4>{{ project.name }} {% if project.total %} ({{ project.total }} điểm) {% endif %} <i class="fas fa-award" style="color: silver;"></i> </h4>
             </div>
+          {% elif loop.index == 3 %}
+            <div>
+              <h4>{{ project.name }} {% if project.total %} ({{ project.total }} điểm) {% endif %} <i class="fas fa-award" style="color: brown;"></i> </h4>
+            </div>
+          {% else %}
+            <div>
+              <h4>{{ project.name }} {% if project.total %} ({{ project.total }} điểm) {% endif %} </h4>
+            </div>
+          {% endif %}
+          <div class="item-right">
+            <a class="link" href="{{ project.slide }}">
+              <i class="far fa-2x fa-fw fa-file-alt"></i>
+            </a>
+            <a class="link" href="{{ project.github }}">
+              <i class="fab fa-2x fa-fw fa-github"></i>
+            </a>
+            {% if project.youtube %}
+              <a class="link" href="{{ project.youtube }}">
+                <i class="fab fa-2x fa-fw fa-youtube"></i>
+              </a>
+            {% else %}
+              <a class="link link-hidden" href="{{ project.youtube }}">
+                <i class="fab fa-2x fa-fw fa-youtube"></i>
+              </a>
+            {% endif %}
           </div>
-        </li>
-      {% endfor %}
-    </ul>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
 </div>
 {% endblock %}

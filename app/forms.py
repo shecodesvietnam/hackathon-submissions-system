@@ -12,9 +12,9 @@ class LoginForm(FlaskForm):
 
 
 class SubmissionForm(FlaskForm):
-    slide = URLField('Slide link:', validators=[DataRequired(), url()])
-    github = URLField('Github Link:', validators=[DataRequired(), url()])
-    youtube = URLField('Youtube link (không bắt buộc):')
+    slide = URLField('Link slide:', validators=[DataRequired(), url()])
+    github = URLField('Link github:', validators=[DataRequired(), url()])
+    youtube = URLField('Link video demo (không bắt buộc):')
     submit = SubmitField('Nộp bài')
 
 

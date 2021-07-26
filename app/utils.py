@@ -1,6 +1,9 @@
+from datetime import datetime
 import random
 import string
 import re
+import pytz
+import tzlocal
 
 
 def generate_random_password(length=12):
@@ -73,3 +76,14 @@ def is_valid_url(url):
     if re.search(compiler, url):
         return True
     return False
+
+
+def get_local_time():
+    utcmoment_naive = datetime.utcnow()
+    utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
+    # print(f'utcmoment_naive: {utcmoment_naive}')
+    # print(f'utcmoment:       {utcmoment}')
+    timezone = 'Asia/Bangkok'
+    time_format = "%d-%m-%Y %H:%M:%S"
+    localDatetime = utcmoment.astimezone(pytz.timezone(timezone))
+    return localDatetime.strftime(time_format)
