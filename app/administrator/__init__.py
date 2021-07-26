@@ -44,7 +44,7 @@ def init_admin(app):
                 model.set_username()
                 if model.role.name != 'Hacker':
                     model.has_confirm = True
-                # send_team_account_email(model, password)
+                send_team_account_email(model, password)
             return super().on_model_change(form, model, is_created)
 
     
