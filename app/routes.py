@@ -33,10 +33,11 @@ def login():
         if user.role.name == 'Hacker' and not user.has_confirm:
             flash('Bạn chưa xác nhận tài khoản của mình.')
             return redirect(url_for('login'))
-        project = Project.query.filter_by(id=user.id).first()
-        if not project:
-            flash('Đội của bạn chưa đăng ký dự án với BTC.')
-            return redirect(url_for('login'))
+        if user.role.name == 'Hacker':
+            p_u = db.session.query(Project, User).filter(User.id==user.id).join(Project, Project.team_id==User.id).first()
+            if not p_u:
+                flash('Đội của bạn chưa đăng ký dự án với BTC.')
+                return redirect(url_for('login'))
         login_user(user, remember=True)
         if user.role.name == 'Mentor':
             return redirect(url_for('teams_round_1'))
@@ -58,7 +59,7 @@ def submit():
     if current_user.role.name != 'Hacker':
         return render_template('401.html'), 401
 
-    project = Project.query.filter_by(id=current_user.id).first()
+    project = Project.query.filter_by(team_id=current_user.id).first()
     form = SubmissionForm()
 
     if form.validate_on_submit():
@@ -78,9 +79,9 @@ def submit():
         flash('Nộp bài thành công!')
         return redirect(url_for('submit'))
     elif request.method == 'GET':
-        form.slide.data = project.slide
-        form.github.data = project.github
-        form.youtube.data = project.youtube
+        form.slide.data = project.slide or ""
+        form.github.data = project.github or ""
+        form.youtube.data = project.youtube or ""
 
     return render_template('submit.html', form=form, title='Nộp bài | Shecodes Hackathon')
 
@@ -153,14 +154,15 @@ def grading_round_1(project_name):
     form = GradeForm()
     project = Project.query.filter_by(name=project_name).first()
 
-    if request.method == 'POST':
+    if form.validate_on_submit():
         total = form.creative.data + form.accessible.data +form.demo.data + form.techOption1.data + form.techOption2.data + form.techOption3.data + form.pitching.data
-        if GradeRound1.query.filter_by(project_id=project.id).first():
-            g = GradeRound1.query.filter_by(project_id=project.id).first()
+        if GradeRound1.query.filter_by(project_id=project.id).filter_by(mentor_id=current_user.id).first():
+            g = GradeRound1.query.filter_by(project_id=project.id).filter_by(mentor_id=current_user.id).first()
             g.total = total
             db.session.commit()
         else:
             g = GradeRound1(mentor_id=current_user.id, project_id=project.id, total=total)
+            db.session.add(g)
             db.session.commit()
         flash('Chấm điểm thành công!')
         return redirect(url_for('teams_round_1'))
@@ -176,10 +178,9 @@ def grading_round_2(project_name):
 
     form = GradeForm()
     project = Project.query.filter_by(name=project_name).first()
-
-    if request.method == 'POST':
-        total = form.creative.data + form.accessible.data +form.demo.data + form.techOption1.data + form.techOption2.data + form.techOption3.data + form.pitching.data
-        g = GradeRound2.query.filter_by(project_id=project.id).first()
+    if form.validate_on_submit():
+        total = form.creative.data + form.accessible.data + form.demo.data + form.techOption1.data + form.techOption2.data + form.techOption3.data + form.pitching.data
+        g = GradeRound2.query.filter_by(project_id=project.id).filter_by(judge_id=current_user.id).first()
         g.total = total
         db.session.commit()
         flash('Chấm điểm thành công!')
