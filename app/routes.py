@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -74,6 +73,12 @@ def submit():
             else:
                 flash('Đường dẫn không hợp lệ, xin hãy thử lại.')
                 return redirect(url_for('submit'))
+        if form.others.data != '':
+            if is_valid_url(form.others.data):
+                project.others = form.others.data
+            else:
+                flash('Đường dẫn không hợp lệ, xin hãy thử lại.')
+                return redirect(url_for('submit'))
         project.timestamp = get_local_time()
         db.session.commit()
         flash('Nộp bài thành công!')
@@ -82,6 +87,7 @@ def submit():
         form.slide.data = project.slide or ""
         form.github.data = project.github or ""
         form.youtube.data = project.youtube or ""
+        form.others.data = project.others or ""
 
     return render_template('submit.html', form=form, title='Nộp bài | Shecodes Hackathon')
 
@@ -93,7 +99,7 @@ def teams_round_1():
         return render_template('401.html'), 401
 
     get_graded_projects = db.session.execute(f"""
-    select project.id as project_id, project.name, project.slide, project.github, project.youtube, graderound1.total
+    select project.id as project_id, project.name, project.slide, project.github, project.youtube, project.others, graderound1.total
     from project
     join graderound1 on graderound1.project_id = project.id
     join users on graderound1.mentor_id = users.id
@@ -101,7 +107,7 @@ def teams_round_1():
     """)
 
     get_not_graded_projects = db.session.execute(f"""
-    select project.id , project.name, project.slide, project.github, project.youtube
+    select project.id , project.name, project.slide, project.github, project.youtube, project.others
     from project
     where project.id not in (
         select project.id from project
@@ -130,7 +136,7 @@ def teams_round_2():
         return render_template('401.html'), 401
 
     top5_round1 = db.session.execute(f"""
-    select project.id, project.name, project.slide, project.github, project.youtube, graderound2.total
+    select project.id, project.name, project.slide, project.github, project.youtube, project.others, graderound2.total
     from graderound2
         join project on graderound2.project_id = project.id
         join users on graderound2.judge_id = users.id

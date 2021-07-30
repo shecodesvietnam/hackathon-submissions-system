@@ -43,11 +43,3 @@ def send_team_account_email(user, password):
             text_body=render_template('email/send_info_hacker.txt', user=user, password=password, token=token),
             html_body=render_template('email/send_info_hacker.html', user=user, password=password, token=token)
         )
-    elif user.role.name == 'Admin':
-        send_email(
-            '[IMPORTANT] Your admin\'s account',
-            sender=app.config['ADMINS'][0],
-            recipients=[user.email],
-            text_body=render_template('email/send_info_admin.txt', user=user, password=password),
-            html_body=render_template('email/send_info_admin.html', user=user, password=password)
-        )

@@ -1,0 +1,22 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <table class="table table-striped table-bordered table-hover model-list">
+        <thead>
+            <tr>
+                <th class="column-header">Id</th>
+                <th class="column-header">Mentor Name</th>
+                <th class="column-header">Grading Process (graded projects/total projects)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for process in processes %}
+                <tr>
+                    <td>{{ process.id }}</td>
+                    <td>{{ process.mentor_name }}</td>
+                    <td>{{ process.grading_process }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

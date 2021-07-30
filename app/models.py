@@ -73,6 +73,7 @@ class Project(db.Model):
     slide = db.Column(URLType, nullable=True)
     github = db.Column(URLType, nullable=True)
     youtube = db.Column(URLType, nullable=True)
+    others = db.Column(URLType, nullable=True)
     timestamp = db.Column(db.String(100), index=True)
     team = db.relationship('User', backref='project')
 

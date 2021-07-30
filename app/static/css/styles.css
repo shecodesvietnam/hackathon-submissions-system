@@ -47,8 +47,8 @@ input{
 
 .logoutBtnContainer{
   position: absolute;
-  right: 10px;
-  bottom: 20px;
+  right: .75rem;
+  top: 0rem;
 }
 
 .logoutBtn{

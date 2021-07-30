@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container h-100">
+<div class="container h-100 position-relative">
   <div class="row h-100 justify-content-center align-items-center">
     <form class="col-12 col-sm-12 col-md-8 col-lg-6 col-xl-5" method="POST">
       {{ form.hidden_tag() }}
@@ -14,15 +14,19 @@
       </h1>
       <div class="form-group">
         {{ form.slide.label(class="text-white") }}
-        {{ form.slide(class="form-control bg-dark text-white", placeholder="Slide link") }}
+        {{ form.slide(class="form-control bg-dark text-white", placeholder="Link slide") }}
       </div>
       <div class="form-group">
         {{ form.github.label(class="text-white") }}
-        {{ form.github(class="form-control bg-dark text-white", placeholder="Github link") }}
+        {{ form.github(class="form-control bg-dark text-white", placeholder="Link github") }}
       </div>
       <div class="form-group">
         {{ form.youtube.label(class="text-white") }}
-        {{ form.youtube(class="form-control bg-dark text-white", placeholder="Youtube link") }}
+        {{ form.youtube(class="form-control bg-dark text-white", placeholder="Link video demo") }}
+      </div>
+      <div class="form-group">
+        {{ form.others.label(class="text-white") }}
+        {{ form.others(class="form-control bg-dark text-white", placeholder="Link khác") }}
       </div>
       <div class="d-flex justify-content-center">
         {{ form.submit(class="btn submitBtn") }}

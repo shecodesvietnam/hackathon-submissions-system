@@ -15,6 +15,7 @@ class SubmissionForm(FlaskForm):
     slide = URLField('Link slide:', validators=[DataRequired(), url()])
     github = URLField('Link github:', validators=[DataRequired(), url()])
     youtube = URLField('Link video demo (không bắt buộc):')
+    others = URLField('Link khác (mô tả dự án, features, etc.) (không bắt buộc):')
     submit = SubmitField('Nộp bài')
 
 
