@@ -128,7 +128,7 @@ def init_admin(app):
         @expose('/')
         def index(self):
             projects = db.session.execute(f"""
-            select project.id, project.name, project.slide, project.github, project.youtube, sum(graderound2.total) as total
+            select project.id, project.name, project.slide, project.github, project.youtube, project.others, sum(graderound2.total) as total
             from graderound2
                 join project on graderound2.project_id = project.id
                 join users on graderound2.judge_id = users.id

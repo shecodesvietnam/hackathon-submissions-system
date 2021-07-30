@@ -46,6 +46,15 @@
                 <i class="fab fa-2x fa-fw fa-youtube"></i>
               </a>
             {% endif %}
+            {% if project.others %}
+              <a class="text-white link" href="{{ project.others }}">
+                <i class="fas fa-2x fa-fw fa-file-word"></i>
+              </a>
+            {% else %}
+              <a class="text-white link-hidden" href="{{ project.others }}">
+                <i class="fas fa-2x fa-fw fa-file-word"></i>
+              </a>
+            {% endif %}
           </div>
         </div>
       </li>
