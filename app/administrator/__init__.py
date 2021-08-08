@@ -4,6 +4,7 @@ from flask import Response, redirect, flash
 from flask_basicauth import BasicAuth
 from flask_admin import Admin
 from flask_admin.contrib import sqla
+from sqlalchemy import func
 from app import db
 from app.models import User, Role, Project, GradeRound1, GradeRound2
 from app.utils import generate_random_password
@@ -66,7 +67,7 @@ def init_admin(app):
         # can_edit = False
         # can_delete = False
         column_list = ('mentor_id', 'project_id', 'total')
-        form_columns = ('mentor_id', 'project_id')
+        form_columns = ('mentor_id', 'project_id', 'total')
 
         def on_model_change(self, form, model, is_created):
             return super().on_model_change(form, model, is_created)
@@ -77,7 +78,7 @@ def init_admin(app):
         # can_edit = False
         # can_delete = False
         column_list = ('judge_id', 'project_id', 'total')
-        form_columns = ('judge_id', 'project_id')
+        form_columns = ('judge_id', 'project_id', 'total')
 
         @expose('/get_round_2')
         def get_round_2(self):
@@ -96,6 +97,7 @@ def init_admin(app):
                     from project
                     join graderound1 on graderound1.project_id = project.id
                     join users on graderound1.mentor_id = users.id
+                    where graderound1.total is not null
                     group by project.id
                     order by total desc
                     limit 5;
@@ -137,25 +139,38 @@ def init_admin(app):
             """)
             return self.render('admin/home.html', projects=projects)
 
-
     class MentorGradingProcessView(BaseView):
         @expose('/')
         def index(self):
-            processes = db.session.execute(f"""
-            SELECT users.id, users.name as mentor_name, COUNT(users.id) AS grading_process
-            FROM users
-                JOIN graderound1 ON graderound1.mentor_id = users.id
-            GROUP BY users.id
-            """)
-            total_projects = len(Project.query.all())
+            total_projects = db.session.query(User.id, User.name, func.count(User.id)).join(GradeRound1, User.id==GradeRound1.mentor_id).group_by(User.id).all()
+
+            graded_projects = db.session.query(User.id, User.name, func.count(User.id)).filter(GradeRound1.total != None).join(GradeRound1, User.id==GradeRound1.mentor_id).group_by(User.id).all()
+
             result = []
-            for process in processes:
-                result.append({
-                    'id': process.id,
-                    'mentor_name': process.mentor_name,
-                    'grading_process': f'{process.grading_process}/{total_projects}'
-                })
+            for total in total_projects:
+                for graded in graded_projects:
+                    if graded.id == total.id:
+                        result.append({
+                            'id': graded[0],
+                            'mentor_name': graded[1],
+                            'grading_process': f'{graded[2]}/{total[2]}'
+                        })
             return self.render('admin/mentor_grading_process.html', processes=result)
+
+    class Round1RankView(BaseView):
+        @expose('/')
+        def index(self):
+            projects = db.session.execute(f"""
+            select project.id, project.name, sum(graderound1.total) as total
+            from graderound1
+                join project on graderound1.project_id = project.id
+                join users on graderound1.mentor_id = users.id
+            where graderound1.total is not null
+            group by project.id
+            order by total desc
+            """)
+
+            return self.render('admin/round_1_ranked.html', projects=projects)
 
     admin = Admin(app, index_view=HomeView(), template_mode='bootstrap3')
     admin.add_view(UserModelView(User, db.session))
@@ -163,5 +178,6 @@ def init_admin(app):
     admin.add_view(ProjectModelView(Project, db.session))
     admin.add_view(GradeRound1ModelView(GradeRound1, db.session))
     admin.add_view(MentorGradingProcessView(name='Mentor Grading Process', endpoint='mentorgradingprocess'))
+    admin.add_view(Round1RankView(name='Round 1 Ranked', endpoint='round1ranked'))
     admin.add_view(GradeRound2ModelView(GradeRound2, db.session))
     

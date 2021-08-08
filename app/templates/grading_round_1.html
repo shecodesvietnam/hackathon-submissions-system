@@ -52,11 +52,6 @@
       </div>
       {{ form.demo(class='form-control bg-dark text-white', value=0) }}
     </div>
-    
-    <h3 class="criteria text-white">Điểm pitching (Điểm cộng, tối đa 10đ)</h3>
-    <div id="pitching-field">
-      {{ form.pitching(class='form-control bg-dark text-white', value=0) }}
-    </div>
 
     <h3 class="criteria text-white">Tổng điểm: <span id="totalGrade"></span> điểm</h3>
 
@@ -69,5 +64,5 @@
 {% endblock %}
 
 {% block js_scripts %}
-  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/script_mentor.js') }}"></script>
 {% endblock %}

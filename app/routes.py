@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
-from app.forms import LoginForm, SubmissionForm, GradeForm
+from app.forms import LoginForm, SubmissionForm, GradeFormMentor, GradeFormJudge
 from app.models import User, Role, Project, GradeRound1, GradeRound2
 from app.utils import is_valid_url, get_local_time
 
@@ -62,23 +62,13 @@ def submit():
     form = SubmissionForm()
 
     if form.validate_on_submit():
-        if not is_valid_url(form.slide.data) or not is_valid_url(form.github.data):
+        if not is_valid_url(form.slide.data) or not is_valid_url(form.github.data) or not is_valid_url(form.youtube.data) or not is_valid_url(form.others.data):
             flash('Đường dẫn không hợp lệ, xin hãy thử lại.')
             return redirect(url_for('submit'))
         project.slide = form.slide.data
         project.github = form.github.data
-        if form.youtube.data != '':
-            if is_valid_url(form.youtube.data):
-                project.youtube = form.youtube.data
-            else:
-                flash('Đường dẫn không hợp lệ, xin hãy thử lại.')
-                return redirect(url_for('submit'))
-        if form.others.data != '':
-            if is_valid_url(form.others.data):
-                project.others = form.others.data
-            else:
-                flash('Đường dẫn không hợp lệ, xin hãy thử lại.')
-                return redirect(url_for('submit'))
+        project.youtube = form.youtube.data
+        project.others = form.others.data
         project.timestamp = get_local_time()
         db.session.commit()
         flash('Nộp bài thành công!')
@@ -98,35 +88,20 @@ def teams_round_1():
     if current_user.role.name != 'Mentor':
         return render_template('401.html'), 401
 
-    get_graded_projects = db.session.execute(f"""
-    select project.id as project_id, project.name, project.slide, project.github, project.youtube, project.others, graderound1.total
+    get_projects = db.session.execute(f"""
+    select project.id, project.name, project.slide, project.github, project.youtube, project.others, graderound1.total
     from project
-    join graderound1 on graderound1.project_id = project.id
-    join users on graderound1.mentor_id = users.id
+        join graderound1 on graderound1.project_id = project.id
+        join users on graderound1.mentor_id = users.id
     where mentor_id = {current_user.id};
     """)
 
-    get_not_graded_projects = db.session.execute(f"""
-    select project.id , project.name, project.slide, project.github, project.youtube, project.others
-    from project
-    where project.id not in (
-        select project.id from project
-            join graderound1 on graderound1.project_id = project.id
-            join users on graderound1.mentor_id = users.id
-        where mentor_id = {current_user.id}
-    ) 
-    """)
+    projects = []
 
-    graded_projects = []
-    not_graded_projects = []
+    for row in get_projects:
+        projects.append(row)
 
-    for row in get_graded_projects:
-        graded_projects.append(row)
-
-    for row in get_not_graded_projects:
-        not_graded_projects.append(row)
-
-    return render_template('teams_round_1.html', title='Vòng 1 | Shecodes Hackathon', graded_projects=graded_projects, not_graded_projects=not_graded_projects)
+    return render_template('teams_round_1.html', title='Vòng 1 | Shecodes Hackathon', projects=projects)
 
 
 @app.route('/teams/round2')
@@ -157,19 +132,14 @@ def grading_round_1(project_name):
     if current_user.role.name != 'Mentor':
         return render_template('401.html'), 401
 
-    form = GradeForm()
+    form = GradeFormMentor()
     project = Project.query.filter_by(name=project_name).first()
 
     if form.validate_on_submit():
-        total = form.creative.data + form.accessible.data +form.demo.data + form.techOption1.data + form.techOption2.data + form.techOption3.data + form.pitching.data
-        if GradeRound1.query.filter_by(project_id=project.id).filter_by(mentor_id=current_user.id).first():
-            g = GradeRound1.query.filter_by(project_id=project.id).filter_by(mentor_id=current_user.id).first()
-            g.total = total
-            db.session.commit()
-        else:
-            g = GradeRound1(mentor_id=current_user.id, project_id=project.id, total=total)
-            db.session.add(g)
-            db.session.commit()
+        total = form.creative.data + form.accessible.data +form.demo.data + form.techOption1.data + form.techOption2.data + form.techOption3.data
+        g = GradeRound1.query.filter_by(project_id=project.id).filter_by(mentor_id=current_user.id).first()
+        g.total = total
+        db.session.commit()
         flash('Chấm điểm thành công!')
         return redirect(url_for('teams_round_1'))
 
@@ -182,7 +152,7 @@ def grading_round_2(project_name):
     if current_user.role.name != 'Judge':
         return render_template('401.html'), 401
 
-    form = GradeForm()
+    form = GradeFormJudge()
     project = Project.query.filter_by(name=project_name).first()
     if form.validate_on_submit():
         total = form.creative.data + form.accessible.data + form.demo.data + form.techOption1.data + form.techOption2.data + form.techOption3.data + form.pitching.data

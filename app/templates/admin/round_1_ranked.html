@@ -1,0 +1,22 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <table class="table table-striped table-bordered table-hover model-list">
+        <thead>
+            <tr>
+                <th class="column-header">Id</th>
+                <th class="column-header">Team Name</th>
+                <th class="column-header">Total points</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.id }}</td>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.total }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
