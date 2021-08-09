@@ -10,7 +10,7 @@
       <li class="list-group-item lstTeam text-white">
         <div class="row">
           <div class="col-7">
-              <h4>{{ project.name }} ({{ project.total }} điểm)</h4>
+            <h4>{{ project.name }} {% if project.total %} ({{ project.total }} điểm) {% endif %} </h4>
           </div>
           <div class="col-3 d-flex justify-content-end">
             <a class="text-white link" href="{{ project.slide }}">
